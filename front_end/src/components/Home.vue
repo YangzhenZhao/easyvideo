@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="12" v-for="o in 5" :key="o">
       <el-card :body-style="{ padding: '0px' }">
-        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+        <img src="http://192.168.0.102:5000/cover_picture/功夫" class="image">
         <div style="padding: 5px;">
           <div class="video-header">
             <span class="video-name">好吃的汉堡</span> <span class="video-size">3.5 GB</span>
@@ -11,7 +11,7 @@
             <el-tag v-for="i in 20" :key="i">标签一</el-tag>
           </div>
           <div>
-            <el-button icon="el-icon-download" type="primary" class="button">下载</el-button>
+            <el-button icon="el-icon-download" type="primary" @click="downloadVideo" class="button">下载</el-button>
           </div>
         </div>
       </el-card>
@@ -26,8 +26,12 @@ export default defineComponent({
   name: 'Home',
   setup () {
     const currentDate = new Date()
+    const downloadVideo = () => {
+      window.open('http://192.168.0.102:5000/download/功夫', '__blank')
+    }
     return {
-      currentDate
+      currentDate,
+      downloadVideo
     }
   }
 })
