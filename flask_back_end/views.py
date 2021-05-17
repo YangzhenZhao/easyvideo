@@ -1,6 +1,7 @@
 from flask_back_end import app, db
-from flask import send_file, jsonify
+from flask import send_file, jsonify, request
 from flask_back_end.models import Tag, Video
+import os
 
 
 @app.route('/download/<video_name>')
@@ -30,3 +31,14 @@ def videos():
             "tags": tag_list,
         })
     return jsonify(res_list)
+
+
+@app.route('/upload/<video_name>', methods=['POST'])
+def upload(video_name: str):
+    f = request.files['file']
+    save_dir = os.path.join(app.config["STORAGE_DIR"], video_name)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    path = os.path.join(app.config["STORAGE_DIR"], save_dir, f.filename)
+    f.save(path)
+    return 'hhhh'
