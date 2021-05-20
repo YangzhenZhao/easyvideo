@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'Upload',
@@ -33,6 +34,7 @@ export default defineComponent({
     const title = ref('')
     const coverPictureName = ref('')
     const videoName = ref('')
+    const videoSize = ref(-1)
     const checkPicUpload = (file: File) => {
       if (title.value === '') {
         ElMessage.error('视频标题不可为空!')
@@ -46,9 +48,22 @@ export default defineComponent({
         return false
       }
       videoName.value = file.name
+      videoSize.value = file.size
     }
     const saveVideo = () => {
       console.log(coverPictureName.value, videoName.value)
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:5000/save_video',
+        params: {
+          name: title.value,
+          bytes_size: videoSize.value,
+          video_file_name: videoName.value,
+          cover_picture_file_name: coverPictureName.value
+        }
+      }).then(function (response) {
+        console.log(response)
+      })
     }
     return {
       title,

@@ -27,7 +27,7 @@ def videos():
         tag_list = [tag.tag_name for tag in tags]
         res_list.append({
             "name": video.name,
-            "size": video.size,
+            "bytesSize": video.bytes_size,
             "tags": tag_list,
         })
     return jsonify(res_list)
@@ -41,4 +41,18 @@ def upload(video_name: str):
         os.makedirs(save_dir)
     path = os.path.join(app.config["STORAGE_DIR"], save_dir, f.filename)
     f.save(path)
-    return 'hhhh'
+    return ''
+
+
+@app.route('/save_video', methods=['POST'])
+def svae_video():
+    args = request.args
+    video = Video()
+    video.name = args["name"]
+    video.bytes_size = int(args["bytes_size"])
+    storage_dir = app.config["STORAGE_DIR"]
+    video.video_path = os.path.join(storage_dir, video.name, args["video_file_name"])
+    video.cover_picture_path = os.path.join(storage_dir, video.name, args["cover_picture_file_name"])
+    db.session.add(video)
+    db.session.commit()
+    return ''
