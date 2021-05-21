@@ -8,7 +8,7 @@
             <span class="video-name">{{ item.name }}</span> <span class="video-size">{{ bytesFormat(item.bytesSize) }}</span>
           </div>
           <div class="video-tags">
-            <el-tag v-for="tagName in item.tags" :key="tagName">标签一</el-tag>
+            <el-tag v-for="tagName in item.tags" :key="tagName">{{ tagName }}</el-tag>
           </div>
           <div>
             <el-button icon="el-icon-download" type="primary" @click="downloadVideo(item.name)" class="button">下载</el-button>
