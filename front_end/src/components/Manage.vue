@@ -24,11 +24,11 @@ export default defineComponent({
     const store = useStore()
     const nowServerAddress = computed(() => store.state.serverAddress)
     const inputVisible = ref(false)
-    const inputValue = ref('')
+    const inputValue = ref(store.state.serverAddress)
     const handleInputConfirm = () => {
       inputVisible.value = false
       store.commit('setServerAddress', inputValue.value)
-      inputValue.value = ''
+      inputValue.value = store.state.serverAddress
     }
     const showInput = () => {
       inputVisible.value = true
@@ -60,7 +60,7 @@ export default defineComponent({
     padding-bottom: 0;
   }
   .input-new-tag {
-    width: 90px;
+    width: 240px;
     margin-left: 10px;
     vertical-align: bottom;
   }

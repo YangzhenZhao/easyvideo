@@ -1,7 +1,7 @@
 from flask_back_end import app, db
 from flask import send_file, jsonify, request
 from flask_back_end.models import Tag, Video, VideoTag
-from flask_back_end.uitls import all_videos
+from flask_back_end.utils import all_videos
 import os
 import json
 
