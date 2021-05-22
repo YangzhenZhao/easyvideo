@@ -1,6 +1,7 @@
 from flask_back_end import app, db
 from flask import send_file, jsonify, request
 from flask_back_end.models import Tag, Video, VideoTag
+from flask_back_end.uitls import all_videos
 import os
 import json
 
@@ -21,9 +22,24 @@ def cover_picture(video_name: str):
 
 @app.route('/videos')
 def videos():
-    videos = Video.query.all()
+    return all_videos()
+
+
+@app.route('/tags_videos/<tags>')
+def tags_videos(tags: str):
+    tag_list = tags.split(',')
+    video_ids = set()
+    for i, tag_name in enumerate(tag_list):
+        tag_id = Tag.query.filter(Tag.tag_name == tag_name).first().id
+        videotags = VideoTag.query.filter(VideoTag.tag_id == tag_id).all()
+        vids = set([vt.video_id for vt in videotags])
+        if i == 0:
+            video_ids = vids
+        else:
+            video_ids &= vids
     res_list = []
-    for video in videos:
+    for video_id in video_ids:
+        video = Video.query.filter(Video.id == video_id).first()
         videotags = VideoTag.query.filter(VideoTag.video_id == video.id).all()
         tag_list = []
         for videotag in videotags:

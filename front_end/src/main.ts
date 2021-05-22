@@ -6,6 +6,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from './components/Home.vue'
 import Tags from './components/Tags.vue'
 import Upload from './components/Upload.vue'
+import Manage from './components/Manage.vue'
+import store from './store'
+
 const routerHistory = createWebHistory()
 const router = createRouter({
   history: routerHistory,
@@ -24,6 +27,11 @@ const router = createRouter({
       path: '/upload',
       name: 'upload',
       component: Upload
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: Manage
     }
   ]
 })
@@ -31,4 +39,5 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router)
 app.use(ElementPlus)
+app.use(store)
 app.mount('#app')

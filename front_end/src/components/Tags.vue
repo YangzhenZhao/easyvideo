@@ -10,8 +10,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, computed } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
 
 interface tagList {
   data: string[]
@@ -20,11 +21,12 @@ interface tagList {
 export default defineComponent({
   name: 'Tags',
   setup () {
+    const store = useStore()
+    const nowServerAddress = computed(() => store.state.serverAddress)
     const allTags = ref()
     const getTags = async () => {
-      const res: tagList = await axios.get('http://127.0.0.1:5000/tags')
+      const res: tagList = await axios.get(`${nowServerAddress.value}/tags`)
       allTags.value = res.data
-      console.log(allTags.value)
     }
     onMounted(async () => {
       await getTags()
@@ -44,6 +46,6 @@ export default defineComponent({
   }
   .el-button {
     margin-bottom: 8px;
-    width: 300px;
+    width: 80%;
   }
 </style>

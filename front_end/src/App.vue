@@ -10,6 +10,7 @@
       <el-menu-item index="1"><i class="el-icon-s-home"></i>首页</el-menu-item>
       <el-menu-item index="2"><i class="el-icon-collection-tag"></i>标签</el-menu-item>
       <el-menu-item index="3"><i class="el-icon-upload"></i>上传</el-menu-item>
+      <el-menu-item index="4"><i class="el-icon-s-tools"></i>管理</el-menu-item>
     </el-menu>
     <router-view></router-view>
   </div>
@@ -31,6 +32,8 @@ export default defineComponent({
         router.push('/tags')
       } else if (key === '3') {
         router.push('/upload')
+      } else if (key === '4') {
+        router.push('/manage')
       }
     }
     return {

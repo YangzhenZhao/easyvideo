@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <el-input v-model="title" placeholder="请输入视频标题"></el-input>
+    <el-input v-model="title" class="input-title" placeholder="请输入视频标题"></el-input>
     <el-upload
       class="upload-cover-pic"
-      :action="`http://localhost:5000/upload/${title}`"
+      :action="`${nowServerAddress}/upload/${title}`"
       :limit=1
       :before-upload="checkPicUpload"
       list-type="picture">
@@ -11,7 +11,7 @@
     </el-upload>
     <el-upload
       class="upload-video"
-      :action="`http://localhost:5000/upload/${title}`"
+      :action="`${nowServerAddress}/upload/${title}`"
       :limit=1
       :before-upload="checkVideoUpload"
       list-type="picture">
@@ -48,9 +48,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, Ref } from 'vue'
+import { defineComponent, ref, onMounted, Ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
+import { useStore } from 'vuex'
 
 interface tagList {
   data: string[]
@@ -59,6 +60,8 @@ interface tagList {
 export default defineComponent({
   name: 'Upload',
   setup () {
+    const store = useStore()
+    const nowServerAddress = computed(() => store.state.serverAddress)
     const title = ref('')
     const coverPictureName = ref('')
     const videoName = ref('')
@@ -68,9 +71,8 @@ export default defineComponent({
     const inputVisible = ref(false)
     const inputValue = ref('')
     const getTags = async () => {
-      const res: tagList = await axios.get('http://127.0.0.1:5000/tags')
+      const res: tagList = await axios.get(`${nowServerAddress.value}/tags`)
       allTags.value = res.data
-      console.log(allTags.value)
     }
     const checkPicUpload = (file: File) => {
       if (title.value === '') {
@@ -91,7 +93,7 @@ export default defineComponent({
       console.log(coverPictureName.value, videoName.value)
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:5000/save_video',
+        url: `${nowServerAddress.value}save_video`,
         params: {
           name: title.value,
           bytes_size: videoSize.value,
@@ -111,8 +113,11 @@ export default defineComponent({
     }
     const handleInputConfirm = () => {
       inputVisible.value = false
-      console.log(inputValue.value)
-      nowUseTags.value.push(inputValue.value)
+      if (nowUseTags.value.indexOf(inputValue.value) !== -1) {
+        ElMessage.error('标签已存在!')
+      } else if (inputValue.value !== '') {
+        nowUseTags.value.push(inputValue.value)
+      }
       inputValue.value = ''
     }
     const handleClose = (tag: string) => {
@@ -144,7 +149,8 @@ export default defineComponent({
       inputValue,
       handleClose,
       isChecked,
-      onChangeChecked
+      onChangeChecked,
+      nowServerAddress
     }
   }
 })
@@ -154,7 +160,7 @@ export default defineComponent({
   .container {
     margin-left: 50px;
   }
-  .el-input {
+  .input-title {
     margin-top: 20px;
     margin-bottom: 20px;
     width: 360px;
@@ -176,7 +182,6 @@ export default defineComponent({
     margin-left: 10px;
   }
   .button-new-tag {
-    margin-left: 10px;
     height: 32px;
     line-height: 30px;
     padding-top: 0;
@@ -184,7 +189,6 @@ export default defineComponent({
   }
   .input-new-tag {
     width: 90px;
-    margin-left: 10px;
     vertical-align: bottom;
   }
 </style>
