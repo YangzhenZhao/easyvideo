@@ -93,7 +93,7 @@ export default defineComponent({
       console.log(coverPictureName.value, videoName.value)
       axios({
         method: 'post',
-        url: `${nowServerAddress.value}save_video`,
+        url: `${nowServerAddress.value}/save_video`,
         params: {
           name: title.value,
           bytes_size: videoSize.value,
