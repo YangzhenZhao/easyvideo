@@ -13,6 +13,9 @@
       <el-menu-item index="4"><i class="el-icon-s-tools"></i>管理</el-menu-item>
     </el-menu>
     <router-view></router-view>
+    <el-footer>
+      <small>&copy; 2021 不要香菜</small>
+    </el-footer>
   </div>
 </template>
 
@@ -47,5 +50,10 @@ export default defineComponent({
 <style>
   body {
     margin: 0;
+  }
+  .el-header, .el-footer {
+    color: #333;
+    text-align: center;
+    line-height: 50px;
   }
 </style>

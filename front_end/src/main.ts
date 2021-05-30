@@ -7,6 +7,7 @@ import Home from './components/Home.vue'
 import Tags from './components/Tags.vue'
 import Upload from './components/Upload.vue'
 import Manage from './components/Manage.vue'
+import PlayVideo from './components/PlayVideo.vue'
 import store from './store'
 
 const routerHistory = createWebHistory()
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/manage',
       name: 'manage',
       component: Manage
+    },
+    {
+      path: '/play-video/:video_name',
+      name: 'play-video',
+      component: PlayVideo
     }
   ]
 })

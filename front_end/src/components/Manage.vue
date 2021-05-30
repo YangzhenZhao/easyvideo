@@ -8,6 +8,7 @@
       ref="saveTagInput"
       size="small"
       @blur="handleInputConfirm"
+      @keyup.enter="handleInputConfirm"
     >
     </el-input>
     <el-button v-else class="button-new-tag" size="small" @click="showInput">{{ nowServerAddress }}</el-button>

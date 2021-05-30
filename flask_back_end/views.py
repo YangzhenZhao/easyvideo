@@ -11,6 +11,8 @@ def download(video_name: str):
     video: Video = Video.query.filter(Video.name == video_name).first()
     res = send_file(video.video_path, as_attachment=True, attachment_filename=os.path.basename(video.video_path))
     res.mimetype = "application/octet-stream"
+    res.accept_ranges = "bytes"
+    res.content_length = str(os.path.getsize(video.video_path))
     return res
 
 

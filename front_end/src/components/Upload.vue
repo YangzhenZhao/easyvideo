@@ -35,6 +35,7 @@
         ref="saveTagInput"
         size="small"
         @blur="handleInputConfirm"
+        @keyup.enter="handleInputConfirm"
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput">添加标签</el-button>
@@ -103,6 +104,9 @@ export default defineComponent({
         }
       }).then(function (response) {
         console.log(response)
+        if (response.status === 200) {
+          ElMessage.success('上传成功!')
+        }
       })
     }
     onMounted(async () => {

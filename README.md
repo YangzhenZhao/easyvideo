@@ -10,9 +10,14 @@
 由于只在本地使用，暂时偷懒不用 Nginx 了(
 
 
-#### 数据库
+#### 配置   
 
-修改后端配置中的数据库用户名和密码
+首先修改后端配置:   
+数据库配置    
+文件保存路径配置   
+
+
+#### 数据库
 
 Mysql 中新建 easyvideo 数据库，创建的数据表的工作交给后端框架来做
 
@@ -21,6 +26,7 @@ Mysql 中新建 easyvideo 数据库，创建的数据表的工作交给后端框
 
 ```bash
 $ cd front_end
+$ npm install
 $ npm run serve
 ```
 
@@ -37,6 +43,7 @@ pymysql.install_as_MySQLdb()
 
 ```bash
 $ cd flask_back_end
+$ pip install -r requirements.txt
 
 # 创建数据表
 $ flask shell

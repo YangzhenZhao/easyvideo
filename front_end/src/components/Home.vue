@@ -37,6 +37,7 @@
             </div>
             <div>
               <el-button icon="el-icon-download" type="primary" @click="downloadVideo(item.name)" class="button">下载</el-button>
+              <el-button icon="el-icon-video-play" type="primary" @click="playVideo(item.name)" class="button">在线播放</el-button>
             </div>
           </div>
         </el-card>
@@ -77,6 +78,9 @@ export default defineComponent({
     const allTags: Ref<any[]> = ref([])
     const downloadVideo = (videoName: string) => {
       window.open(`${nowServerAddress.value}/download/${videoName}`, '__blank')
+    }
+    const playVideo = (videoName: string) => {
+      window.open(`play-video/${videoName}`, '__blank')
     }
     const getVideos = async () => {
       const res: videoList = await axios.get(`${nowServerAddress.value}/videos`)
@@ -149,7 +153,8 @@ export default defineComponent({
       querySearch,
       handleSelect,
       handleClose,
-      nowServerAddress
+      nowServerAddress,
+      playVideo
     }
   }
 })
@@ -177,7 +182,7 @@ export default defineComponent({
     color: #7a7a7a;
   }
   .button {
-    width: 100%;
+    width: 48%;
   }
   .tags-selected {
     height: 32px;

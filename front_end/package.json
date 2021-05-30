@@ -1,6 +1,6 @@
 {
   "name": "EasyVideo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "dplayer": "^1.26.0",
     "element-plus": "*",
     "vue": "^3.0.0",
     "vue-router": "^4.0.6",
