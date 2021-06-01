@@ -14,7 +14,7 @@
     </el-menu>
     <router-view></router-view>
     <el-footer>
-      <small>&copy; 2021 不要香菜</small>
+      <small>&copy; 不要香菜</small>
     </el-footer>
   </div>
 </template>
