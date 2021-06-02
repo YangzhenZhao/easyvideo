@@ -5,22 +5,34 @@
 
 
 
-### 启动服务
 
 
-#### 配置   
+### 配置   
 
 首先修改后端配置:   
 数据库配置    
 文件保存路径配置   
 
 
-#### 数据库
+### 数据库
 
 Mysql 中新建 easyvideo 数据库，创建的数据表的工作交给后端框架来做
 
 
-#### flask   
+### actix-web
+
+```sh
+# ubuntu
+sudo apt-get install libsqlite3-dev sqlite3
+sudo apt install libpq-dev -y
+
+cargo install diesel_cli
+```
+
+
+
+
+### flask   
 
 如果使用 windows，需要在 `__init__.py` 中添加如下内容 
 
@@ -68,7 +80,7 @@ server {
 使用 gunicorn + nginx 在 windows 的 wsl2 中部署后，本地其他机器访问时，下载速度很慢(最慢仅有 100KB/s，最快也只有 2.3MB/s)      
 
 
-#### 前端
+### 前端
 
 
 ```bash

@@ -1,8 +1,15 @@
-use actix_web::{get, middleware, post, web, App, Error, HttpResponse, HttpServer};
+use actix_web::{middleware, App, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
-type DbPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
+#[macro_use]
+extern crate diesel;
+
+mod models;
+mod schema;
+mod views;
+
+use crate::views::videos;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -14,7 +21,7 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.");
 
-    let bind = "127.0.0.1:8080";
+    let bind = "0.0.0.0:8080";
 
     println!("Starting server at: {}", &bind);
 
@@ -22,6 +29,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .data(pool.clone())
             .wrap(middleware::Logger::default())
+            .service(videos)
     })
     .bind(&bind)?
     .run()
