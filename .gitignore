@@ -30,3 +30,7 @@ __pycache__/
 # Distribution / packaging
 *.egg-info/
 build/
+
+
+# rust
+*/target
