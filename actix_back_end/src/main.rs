@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{middleware, App, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
@@ -9,7 +10,7 @@ mod models;
 mod schema;
 mod views;
 
-use crate::views::videos;
+use crate::views::{cover_picture, download, tags, videos};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -28,8 +29,17 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(pool.clone())
+            .wrap(
+                Cors::default()
+                    .allow_any_origin()
+                    .allow_any_method()
+                    .allow_any_header(),
+            )
             .wrap(middleware::Logger::default())
             .service(videos)
+            .service(download)
+            .service(cover_picture)
+            .service(tags)
     })
     .bind(&bind)?
     .run()
