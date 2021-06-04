@@ -1,7 +1,7 @@
 
 ### easyvideo
 
-简易的视频上传下载服务(目前仅用在本地服务器或电脑上)
+简易的视频上传下载服务
 
 
 
@@ -19,6 +19,20 @@
 Mysql 中新建 easyvideo 数据库，创建的数据表的工作交给后端框架来做
 
 
+
+### 前端
+
+
+```bash
+$ cd front_end
+$ npm install
+$ npm run serve
+```
+
+注:    
+目前只部署在本地某个机器，暂不使用 nginx 
+
+
 ### actix-web
 
 ```sh
@@ -32,7 +46,7 @@ cargo install diesel_cli
 
 
 
-### flask   
+### flask(不推荐使用)   
 
 如果使用 windows，需要在 `__init__.py` 中添加如下内容 
 
@@ -80,17 +94,6 @@ server {
 使用 gunicorn + nginx 在 windows 的 wsl2 中部署后，本地其他机器访问时，下载速度很慢(最慢仅有 100KB/s，最快也只有 2.3MB/s)      
 
 
-### 前端
-
-
-```bash
-$ cd front_end
-$ npm install
-$ npm run serve
-```
-
-注:    
-目前只部署在本地某个机器，暂不使用 nginx 
 
 
 ### 访问

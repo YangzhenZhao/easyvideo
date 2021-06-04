@@ -10,7 +10,7 @@ mod models;
 mod schema;
 mod views;
 
-use crate::views::{cover_picture, download, tags, videos};
+use crate::views::{cover_picture, download, tags, videos, upload, svae_video};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -40,6 +40,8 @@ async fn main() -> std::io::Result<()> {
             .service(download)
             .service(cover_picture)
             .service(tags)
+            .service(upload)
+            .service(svae_video)
     })
     .bind(&bind)?
     .run()

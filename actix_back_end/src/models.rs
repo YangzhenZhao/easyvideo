@@ -26,3 +26,12 @@ pub struct VideoTag {
     pub video_id: i32,
     pub tag_id: i32,
 }
+
+#[derive(Insertable)]
+#[table_name = "video"]
+pub struct NewVideo<'a> {
+    pub name: &'a str,
+    pub bytes_size: i64,
+    pub video_path: &'a str,
+    pub cover_picture_path: &'a str,
+}
