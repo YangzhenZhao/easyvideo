@@ -43,6 +43,11 @@ sudo apt install libpq-dev -y
 cargo install diesel_cli
 ```
 
+```sh
+$ cd actix_back_end
+$ cargo run --release
+```
+
 
 
 

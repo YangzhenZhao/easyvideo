@@ -10,7 +10,7 @@ mod models;
 mod schema;
 mod views;
 
-use crate::views::{cover_picture, download, tags, videos, upload, svae_video};
+use crate::views::{cover_picture, download, svae_video, tags, tags_videos, upload, videos};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -22,7 +22,7 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.");
 
-    let bind = "0.0.0.0:8080";
+    let bind = "0.0.0.0:8000";
 
     println!("Starting server at: {}", &bind);
 
@@ -42,6 +42,7 @@ async fn main() -> std::io::Result<()> {
             .service(tags)
             .service(upload)
             .service(svae_video)
+            .service(tags_videos)
     })
     .bind(&bind)?
     .run()
