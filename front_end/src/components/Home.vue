@@ -51,7 +51,6 @@ import axios from 'axios'
 import { defineComponent, onMounted, ref, Ref, watch, computed } from 'vue'
 import * as utils from '../hooks/utils'
 import { ElMessage } from 'element-plus'
-import { useStore } from 'vuex'
 
 interface videoModel {
   name: string,
@@ -68,8 +67,9 @@ interface tagList {
 export default defineComponent({
   name: 'Home',
   setup () {
-    const store = useStore()
-    const nowServerAddress = computed(() => store.state.serverAddress)
+    const nowServerAddress = computed(() => {
+      return utils.serverAddress()
+    })
     const currentDate = new Date()
     const videoList = ref()
     const selectedTags: Ref<string[]> = ref([])
@@ -196,6 +196,7 @@ export default defineComponent({
   }
   .el-tag + .el-tag {
     margin-left: 10px;
+    margin-bottom: 4px;
   }
   .button-new-tag {
     margin-left: 10px;

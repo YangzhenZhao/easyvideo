@@ -18,14 +18,17 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import * as utils from '../hooks/utils'
 
 export default defineComponent({
   name: 'Manage',
   setup () {
     const store = useStore()
-    const nowServerAddress = computed(() => store.state.serverAddress)
+    const nowServerAddress = computed(() => {
+      return utils.serverAddress()
+    })
+    const inputValue = ref(utils.serverAddress())
     const inputVisible = ref(false)
-    const inputValue = ref(store.state.serverAddress)
     const handleInputConfirm = () => {
       inputVisible.value = false
       store.commit('setServerAddress', inputValue.value)
@@ -35,11 +38,11 @@ export default defineComponent({
       inputVisible.value = true
     }
     return {
-      nowServerAddress,
       inputVisible,
       inputValue,
       handleInputConfirm,
-      showInput
+      showInput,
+      nowServerAddress
     }
   }
 })

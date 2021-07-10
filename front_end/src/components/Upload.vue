@@ -54,7 +54,7 @@
 import { defineComponent, ref, onMounted, Ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
-import { useStore } from 'vuex'
+import * as utils from '../hooks/utils'
 
 interface tagList {
   data: string[]
@@ -63,8 +63,9 @@ interface tagList {
 export default defineComponent({
   name: 'Upload',
   setup () {
-    const store = useStore()
-    const nowServerAddress = computed(() => store.state.serverAddress)
+    const nowServerAddress = computed(() => {
+      return utils.serverAddress()
+    })
     const title = ref('')
     const coverPictureName = ref('')
     const videoName = ref('')

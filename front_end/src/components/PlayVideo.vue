@@ -9,15 +9,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, computed } from 'vue'
-import { useStore } from 'vuex'
 import DPlayer from 'dplayer'
 import { useRoute } from 'vue-router'
+import * as utils from '../hooks/utils'
 
 export default defineComponent({
   name: 'Manage',
   setup () {
-    const store = useStore()
-    const nowServerAddress = computed(() => store.state.serverAddress)
+    const nowServerAddress = computed(() => {
+      return utils.serverAddress()
+    })
     const route = useRoute()
     const videoName = route.params.video_name
     onMounted(() => {
