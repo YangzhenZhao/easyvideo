@@ -16,6 +16,7 @@
     <el-footer>
       <small>&copy; 不要香菜</small>
     </el-footer>
+    <el-backtop></el-backtop>
   </div>
 </template>
 

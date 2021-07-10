@@ -25,7 +25,7 @@
       <el-button v-else class="button-new-tag" size="small" @click="showInput">添加标签</el-button>
     </div>
     <el-row>
-      <el-col :span="12" v-for="item in videoList" :key="item.name">
+      <el-col :span="8" v-for="item in videoList" :key="item.name">
         <el-card :body-style="{ padding: '0px' }">
           <img :src="`${nowServerAddress}/cover_picture/${item.name}`" class="image">
           <div style="padding: 5px;">
@@ -35,9 +35,9 @@
             <div class="video-tags">
               <el-tag v-for="tagName in item.tags" :key="tagName">{{ tagName }}</el-tag>
             </div>
-            <div>
-              <el-button icon="el-icon-download" type="primary" @click="downloadVideo(item.name)" class="button">下载</el-button>
-              <el-button icon="el-icon-video-play" type="primary" @click="playVideo(item.name)" class="button">在线播放</el-button>
+            <div class='donwload-play'>
+              <el-button icon="el-icon-download" type="primary" @click="downloadVideo(item.name)">下载</el-button>
+              <el-button icon="el-icon-video-play" type="primary" @click="playVideo(item.name)">在线播放</el-button>
             </div>
           </div>
         </el-card>
@@ -163,7 +163,7 @@ export default defineComponent({
 <style scoped>
   .image {
     width: 100%;
-    height: 486px;
+    height: 20em;
   }
   .el-col {
     padding: 10px;
@@ -181,8 +181,11 @@ export default defineComponent({
   .video-size {
     color: #7a7a7a;
   }
-  .button {
-    width: 48%;
+  .donwload-play {
+    display: flex;
+  }
+  .donwload-play .el-button {
+    flex: 1;
   }
   .tags-selected {
     height: 32px;

@@ -28,16 +28,18 @@
       >
         {{tag}}
       </el-tag>
-      <el-input
+      <el-autocomplete
         v-if="inputVisible"
         class="input-new-tag"
         v-model="inputValue"
         ref="saveTagInput"
         size="small"
-        @blur="handleInputConfirm"
+        :fetch-suggestions="querySearch"
+        placeholder="请输入标签名称"
+        @select="handleInputConfirm"
         @keyup.enter="handleInputConfirm"
       >
-      </el-input>
+      </el-autocomplete>
       <el-button v-else class="button-new-tag" size="small" @click="showInput">添加标签</el-button>
     </div>
     <div>
@@ -67,13 +69,33 @@ export default defineComponent({
     const coverPictureName = ref('')
     const videoName = ref('')
     const videoSize = ref(-1)
-    const allTags = ref()
+    const allTags: Ref<any[]> = ref([])
+    const allSelectTags: Ref<any[]> = ref([])
     const nowUseTags: Ref<string[]> = ref([])
     const inputVisible = ref(false)
     const inputValue = ref('')
+    const querySearch = (queryString: string, cb: any) => {
+      var results = queryString
+        ? allSelectTags.value.filter(createFilter(queryString))
+        : allSelectTags.value
+      cb(results)
+    }
+    const createFilter = (queryString: string) => {
+      return (tagName: any) => {
+        return (
+          tagName.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        )
+      }
+    }
     const getTags = async () => {
       const res: tagList = await axios.get(`${nowServerAddress.value}/tags`)
       allTags.value = res.data
+      for (let i = 0; i < res.data.length; i++) {
+        allSelectTags.value.push({
+          value: res.data[i]
+        })
+      }
     }
     const checkPicUpload = (file: File) => {
       if (title.value === '') {
@@ -154,7 +176,8 @@ export default defineComponent({
       handleClose,
       isChecked,
       onChangeChecked,
-      nowServerAddress
+      nowServerAddress,
+      querySearch
     }
   }
 })
