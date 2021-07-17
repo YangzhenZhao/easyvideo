@@ -163,10 +163,11 @@ export default defineComponent({
 <style scoped>
   .image {
     width: 100%;
-    height: 20em;
+    height: 18em;
   }
   .el-col {
     padding: 10px;
+    min-width: 320px;
   }
   .video-header {
     margin-top: 5px;
