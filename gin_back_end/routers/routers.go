@@ -1,8 +1,11 @@
 package routers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"path"
 	"strings"
 
 	"github.com/YangzhenZhao/easyvideo/gin_back_end/models"
@@ -159,8 +162,93 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
+func dirNotExist(dirPath string) bool {
+	if _, err := os.Stat(dirPath); err != nil {
+		if os.IsNotExist(err) {
+			return true
+		}
+	}
+	return false
+}
+
+func upload(c *gin.Context) {
+	var videoName VideoName
+	if err := c.ShouldBindUri(&videoName); err != nil {
+		c.JSON(400, gin.H{"msg": err})
+		return
+	}
+	file, _ := c.FormFile("file")
+	dirPath := settings.STORAGE_DIR + "/" + videoName.VideoName
+	filePath := dirPath + "/" + file.Filename
+	if dirNotExist(dirPath) {
+		os.Mkdir(dirPath, 0777)
+	}
+
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		fmt.Println(err)
+	}
+
+	c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
+}
+
+type VideoDetail struct {
+	Name                 string `form:"name"`
+	BytesSize            uint64 `form:"bytes_size"`
+	Tags                 string `form:"tags"`
+	VideoFileName        string `form:"video_file_name"`
+	CoverPictureFileName string `form:"cover_picture_file_name"`
+}
+
+func saveVideo(c *gin.Context) {
+	var videoDetail VideoDetail
+
+	if c.ShouldBind(&videoDetail) != nil {
+		c.JSON(400, gin.H{"msg": "参数错误!"})
+		return
+	}
+	tagList := []string{}
+	json.Unmarshal([]byte(videoDetail.Tags), &tagList)
+	videoPath := path.Join(settings.STORAGE_DIR, videoDetail.Name, videoDetail.VideoFileName)
+	coverPicturePath := path.Join(settings.STORAGE_DIR, videoDetail.Name, videoDetail.CoverPictureFileName)
+	video := models.Video{
+		Name:             videoDetail.Name,
+		BytesSize:        videoDetail.BytesSize,
+		VideoPath:        videoPath,
+		CoverPictruePath: coverPicturePath,
+	}
+	settings.DB.Create(&video)
+	tagIds := []uint{}
+	for _, tagNmae := range tagList {
+		var tag models.Tag
+		result := settings.DB.Where("tag_name = ?", tagNmae).First(&tag)
+		if result.Error != nil {
+			tag := models.Tag{
+				TagName: tagNmae,
+			}
+			settings.DB.Create(&tag)
+			var tagTmp models.Tag
+			settings.DB.Where("tag_name = ?", tagNmae).First(&tagTmp)
+			tagIds = append(tagIds, tagTmp.ID)
+		} else {
+			tagIds = append(tagIds, tag.ID)
+		}
+
+	}
+	var videoQuery models.Video
+	settings.DB.Where("name = ?", video.Name).First(&videoQuery)
+	for _, tagId := range tagIds {
+		videoTag := models.VideoTag{
+			VideoId: videoQuery.ID,
+			TagId:   tagId,
+		}
+		settings.DB.Create(&videoTag)
+	}
+}
+
 func InitRouters() *gin.Engine {
 	r := gin.Default()
+	// 为 multipart forms 设置的内存限制为 10GB (默认是 32 MiB)
+	r.MaxMultipartMemory = 10 << 30 // 10 GB
 	r.Use(Cors())
 
 	r.GET("/videos", allVideos)
@@ -168,5 +256,7 @@ func InitRouters() *gin.Engine {
 	r.GET("/cover_picture/:video_name", coverPicture)
 	r.GET("/download/:video_name", download)
 	r.GET("/tags_videos/:tag_names", tagsVideos)
+	r.POST("/upload/:video_name", upload)
+	r.POST("/save_video", saveVideo)
 	return r
 }
