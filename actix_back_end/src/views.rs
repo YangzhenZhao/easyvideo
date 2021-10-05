@@ -15,6 +15,7 @@ use std::collections::HashSet;
 use std::io::Write;
 
 type DbPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
+const STORAGE_DIR: &str = "/mnt/d/video_storage/";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct VideoViewItem {
@@ -106,7 +107,7 @@ pub async fn upload(
     while let Ok(Some(mut field)) = payload.try_next().await {
         let content_type = field.content_disposition().unwrap();
         let filename = content_type.get_filename().unwrap();
-        let filepath = format!("/mnt/f/easyvideo/storage/{}", video_name);
+        let filepath = format!("{}{}", STORAGE_DIR, video_name);
 
         let filepath_tmp = filepath.clone();
         web::block(|| std::fs::create_dir(filepath_tmp)).await.ok();
@@ -144,13 +145,10 @@ pub async fn svae_video(
     let new_video = models::NewVideo {
         name: &info.name,
         bytes_size: info.bytes_size,
-        video_path: &format!(
-            "/mnt/f/easyvideo/storage/{}/{}",
-            info.name, info.video_file_name
-        ),
+        video_path: &format!("{}{}/{}", STORAGE_DIR, info.name, info.video_file_name),
         cover_picture_path: &format!(
-            "/mnt/f/easyvideo/storage/{}/{}",
-            info.name, info.cover_picture_file_name
+            "{}{}/{}",
+            STORAGE_DIR, info.name, info.cover_picture_file_name
         ),
     };
     insert_into(video).values(&new_video).execute(&conn).ok();
