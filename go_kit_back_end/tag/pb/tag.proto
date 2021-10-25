@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/YangzhenZhao/easyvideo/go_kit_back_end/pb";
+
+package tag;
+
+service TagServe {
+    rpc getTag(GetTagRequest) returns (GetTagReply);
+}
+
+message GetTagRequest {
+    int32 videoId = 1;
+}
+
+message GetTagReply {
+    repeated string tags = 1;
+}
