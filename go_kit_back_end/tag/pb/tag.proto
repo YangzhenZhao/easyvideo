@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/YangzhenZhao/easyvideo/go_kit_back_end/pb";
+option go_package = "github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/pb";
 
 package tag;
 
