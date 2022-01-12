@@ -1,19 +1,17 @@
 package service
 
-type VideoViewItem struct {
-	Name      string   `json:"name"`
-	BytesSize uint64   `json:"bytesSize"`
-	Tags      []string `json:"tags"`
+import "context"
+
+type TagService interface {
+	GetVideoTags(ctx context.Context, videoId int32) []string
 }
 
-type VideoService interface {
-	AllVideos() ([]VideoViewItem, error)
+type tagService struct{}
+
+func (s tagService) GetVideoTags(ctx context.Context, videoId int32) []string {
+	return []string{}
 }
 
-type videoService struct{}
-
-func (videoService) AllVideos() ([]VideoViewItem, error) {
-	resList := []VideoViewItem{}
-
-	return resList, nil
+func New() TagService {
+	return tagService{}
 }

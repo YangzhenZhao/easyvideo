@@ -14,86 +14,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// TagServeClient is the client API for TagServe service.
+// TagServiceClient is the client API for TagService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TagServeClient interface {
-	GetTag(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error)
+type TagServiceClient interface {
+	GetVideoTags(ctx context.Context, in *GetVideoTagsRequest, opts ...grpc.CallOption) (*GetVideoTagsResponse, error)
 }
 
-type tagServeClient struct {
+type tagServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTagServeClient(cc grpc.ClientConnInterface) TagServeClient {
-	return &tagServeClient{cc}
+func NewTagServiceClient(cc grpc.ClientConnInterface) TagServiceClient {
+	return &tagServiceClient{cc}
 }
 
-func (c *tagServeClient) GetTag(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error) {
-	out := new(GetTagReply)
-	err := c.cc.Invoke(ctx, "/tag.TagServe/getTag", in, out, opts...)
+func (c *tagServiceClient) GetVideoTags(ctx context.Context, in *GetVideoTagsRequest, opts ...grpc.CallOption) (*GetVideoTagsResponse, error) {
+	out := new(GetVideoTagsResponse)
+	err := c.cc.Invoke(ctx, "/tag.TagService/GetVideoTags", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TagServeServer is the server API for TagServe service.
-// All implementations must embed UnimplementedTagServeServer
+// TagServiceServer is the server API for TagService service.
+// All implementations must embed UnimplementedTagServiceServer
 // for forward compatibility
-type TagServeServer interface {
-	GetTag(context.Context, *GetTagRequest) (*GetTagReply, error)
-	mustEmbedUnimplementedTagServeServer()
+type TagServiceServer interface {
+	GetVideoTags(context.Context, *GetVideoTagsRequest) (*GetVideoTagsResponse, error)
+	mustEmbedUnimplementedTagServiceServer()
 }
 
-// UnimplementedTagServeServer must be embedded to have forward compatible implementations.
-type UnimplementedTagServeServer struct {
+// UnimplementedTagServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedTagServiceServer struct {
 }
 
-func (UnimplementedTagServeServer) GetTag(context.Context, *GetTagRequest) (*GetTagReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTag not implemented")
+func (UnimplementedTagServiceServer) GetVideoTags(context.Context, *GetVideoTagsRequest) (*GetVideoTagsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVideoTags not implemented")
 }
-func (UnimplementedTagServeServer) mustEmbedUnimplementedTagServeServer() {}
+func (UnimplementedTagServiceServer) mustEmbedUnimplementedTagServiceServer() {}
 
-// UnsafeTagServeServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TagServeServer will
+// UnsafeTagServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TagServiceServer will
 // result in compilation errors.
-type UnsafeTagServeServer interface {
-	mustEmbedUnimplementedTagServeServer()
+type UnsafeTagServiceServer interface {
+	mustEmbedUnimplementedTagServiceServer()
 }
 
-func RegisterTagServeServer(s grpc.ServiceRegistrar, srv TagServeServer) {
-	s.RegisterService(&TagServe_ServiceDesc, srv)
+func RegisterTagServiceServer(s grpc.ServiceRegistrar, srv TagServiceServer) {
+	s.RegisterService(&TagService_ServiceDesc, srv)
 }
 
-func _TagServe_GetTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTagRequest)
+func _TagService_GetVideoTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVideoTagsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServeServer).GetTag(ctx, in)
+		return srv.(TagServiceServer).GetVideoTags(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag.TagServe/getTag",
+		FullMethod: "/tag.TagService/GetVideoTags",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServeServer).GetTag(ctx, req.(*GetTagRequest))
+		return srv.(TagServiceServer).GetVideoTags(ctx, req.(*GetVideoTagsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TagServe_ServiceDesc is the grpc.ServiceDesc for TagServe service.
+// TagService_ServiceDesc is the grpc.ServiceDesc for TagService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TagServe_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "tag.TagServe",
-	HandlerType: (*TagServeServer)(nil),
+var TagService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "tag.TagService",
+	HandlerType: (*TagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "getTag",
-			Handler:    _TagServe_GetTag_Handler,
+			MethodName: "GetVideoTags",
+			Handler:    _TagService_GetVideoTags_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -4,14 +4,14 @@ option go_package = "github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/pb";
 
 package tag;
 
-service TagServe {
-    rpc getTag(GetTagRequest) returns (GetTagReply);
+service TagService {
+    rpc GetVideoTags(GetVideoTagsRequest) returns (GetVideoTagsResponse);
 }
 
-message GetTagRequest {
-    int32 videoId = 1;
+message GetVideoTagsRequest {
+    int32 videoID = 1;
 }
 
-message GetTagReply {
+message GetVideoTagsResponse {
     repeated string tags = 1;
 }
