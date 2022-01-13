@@ -12,7 +12,7 @@ import (
 func NewHTTPHandler(endpoints endpoint.Endpoints) http.Handler {
 	m := http.NewServeMux()
 	m.Handle("/get_video_tags", kitHttp.NewServer(
-		endpoints.GetVideoTags,
+		endpoints.GetVideoTagsEndpoint,
 		decodeGetVideoTagsRequest,
 		encodeGetVideoTagsResponse,
 	))

@@ -8,12 +8,12 @@ import (
 )
 
 type Endpoints struct {
-	GetVideoTags endpoint.Endpoint
+	GetVideoTagsEndpoint endpoint.Endpoint
 }
 
 func New(svc service.TagService) Endpoints {
 	return Endpoints{
-		GetVideoTags: MakeGetVideoTagsEndpoint(svc),
+		GetVideoTagsEndpoint: MakeGetVideoTagsEndpoint(svc),
 	}
 }
 
