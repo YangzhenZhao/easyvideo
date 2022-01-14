@@ -3,8 +3,11 @@ package transport
 import (
 	"context"
 
+	"google.golang.org/grpc"
+
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/endpoint"
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/pb"
+	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/service"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 )
 
@@ -21,8 +24,6 @@ func (s *grpcServer) GetVideoTags(ctx context.Context, req *pb.GetVideoTagsReque
 	return rep.(*pb.GetVideoTagsResponse), nil
 }
 
-func (grpcServer) mustEmbedUnimplementedTagServiceServer() {}
-
 func NewGRPCServer(endpoints endpoint.Endpoints) pb.TagServiceServer {
 	return &grpcServer{
 		getVideoTags: grpctransport.NewServer(
@@ -33,12 +34,35 @@ func NewGRPCServer(endpoints endpoint.Endpoints) pb.TagServiceServer {
 	}
 }
 
+func NewGRPCClient(conn *grpc.ClientConn) service.TagService {
+	return endpoint.Endpoints{
+		GetVideoTagsEndpoint: grpctransport.NewClient(
+			conn,
+			"tag.TagService",
+			"GetVideoTags",
+			encodeGRPCGetVideoTagsRequest,
+			decodeGRPCGetVideoTagsResponse,
+			pb.GetVideoTagsResponse{},
+		).Endpoint(),
+	}
+}
+
 func decodeGRPCGetVideoTagsRequest(ctx context.Context, grpcReq interface{}) (interface{}, error) {
 	req := grpcReq.(*pb.GetVideoTagsRequest)
 	return endpoint.GetVideoTagsRequest{VideoID: req.VideoID}, nil
 }
 
-func encodeGRPCGetVideoTagsResponse(_ context.Context, response interface{}) (interface{}, error) {
+func encodeGRPCGetVideoTagsResponse(ctx context.Context, response interface{}) (interface{}, error) {
 	resp := response.(endpoint.GetVideoTagsResponse)
 	return &pb.GetVideoTagsResponse{Tags: resp.Tags}, nil
+}
+
+func encodeGRPCGetVideoTagsRequest(ctx context.Context, request interface{}) (interface{}, error) {
+	req := request.(endpoint.GetVideoTagsRequest)
+	return &pb.GetVideoTagsRequest{VideoID: req.VideoID}, nil
+}
+
+func decodeGRPCGetVideoTagsResponse(ctx context.Context, grpcReq interface{}) (interface{}, error) {
+	resp := grpcReq.(*pb.GetVideoTagsResponse)
+	return endpoint.GetVideoTagsResponse{Tags: resp.Tags}, nil
 }
