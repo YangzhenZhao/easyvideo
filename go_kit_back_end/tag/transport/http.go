@@ -43,6 +43,10 @@ func decodeGetAllTagsRequest(ctx context.Context, r *http.Request) (interface{},
 
 func encodeGetAllTagsResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	err = json.NewEncoder(w).Encode(response)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
+	resp := response.(endpoint.GetAllTagsResponse)
+	err = json.NewEncoder(w).Encode(resp.Tags)
 	return
 }
