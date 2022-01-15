@@ -4,8 +4,11 @@ option go_package = "github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/pb";
 
 package tag;
 
+import "google/protobuf/empty.proto";
+
 service TagService {
     rpc GetVideoTags(GetVideoTagsRequest) returns (GetVideoTagsResponse);
+    rpc GetAllTags(google.protobuf.Empty) returns (GetAllTagsResponse);
 }
 
 message GetVideoTagsRequest {
@@ -13,5 +16,9 @@ message GetVideoTagsRequest {
 }
 
 message GetVideoTagsResponse {
+    repeated string tags = 1;
+}
+
+message GetAllTagsResponse {
     repeated string tags = 1;
 }

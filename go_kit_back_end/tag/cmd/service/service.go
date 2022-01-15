@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/config"
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/endpoint"
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/pb"
+	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/rds"
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/service"
 	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/tag/transport"
 	kitgrpc "github.com/go-kit/kit/transport/grpc"
@@ -15,6 +17,9 @@ import (
 )
 
 func Run() {
+	rds.InitMysql(config.RDSConfig{
+		Dsn: "root:woaini123@tcp(127.0.0.1:3306)/easyvideo?charset=utf8mb4&parseTime=True&loc=Local",
+	})
 	var (
 		service     = service.New()
 		endpoints   = endpoint.New(service)

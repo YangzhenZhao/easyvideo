@@ -17,6 +17,7 @@ func main() {
 		os.Exit(1)
 	}
 	svc := transport.NewGRPCClient(conn)
+	// tags := svc.GetVideoTags(context.Background(), 11)
 	tags := svc.GetVideoTags(context.Background(), 2333)
 	// if err != nil {
 	// 	fmt.Fprintf(os.Stderr, "error: %v\n", err)

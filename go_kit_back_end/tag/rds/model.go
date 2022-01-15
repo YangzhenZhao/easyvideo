@@ -1,14 +1,14 @@
-package dao
+package rds
 
 type Tag struct {
-	ID      uint   `gorm:"primaryKey"`
+	ID      int32  `gorm:"primaryKey"`
 	TagName string `gorm:"index;column:tag_name"`
 }
 
 type VideoTag struct {
-	ID      uint `gorm:"primaryKey"`
-	VideoId uint `gorm:"index;column:video_id"`
-	TagId   uint `gorm:"index;column:tag_id"`
+	ID      int32 `gorm:"primaryKey"`
+	VideoId int32 `gorm:"index;column:video_id"`
+	TagId   int32 `gorm:"index;column:tag_id"`
 }
 
 func (Tag) TableName() string {
