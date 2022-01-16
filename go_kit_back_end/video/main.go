@@ -1,5 +1,0 @@
-package video
-
-func main() {
-
-}

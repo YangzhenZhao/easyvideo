@@ -1,19 +1,42 @@
 package service
 
-type VideoViewItem struct {
+import (
+	"context"
+
+	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/video/external/tag"
+	"github.com/YangzhenZhao/easyvideo/go_kit_back_end/video/rds"
+)
+
+type VideoMetadata struct {
 	Name      string   `json:"name"`
-	BytesSize uint64   `json:"bytesSize"`
+	BytesSize int64    `json:"bytesSize"`
 	Tags      []string `json:"tags"`
 }
 
 type VideoService interface {
-	AllVideos() ([]VideoViewItem, error)
+	GetAllVideosMetadata(ctx context.Context) ([]VideoMetadata, error)
 }
 
 type videoService struct{}
 
-func (videoService) AllVideos() ([]VideoViewItem, error) {
-	resList := []VideoViewItem{}
+func (s videoService) GetAllVideosMetadata(ctx context.Context) ([]VideoMetadata, error) {
+	videosData, err := rds.VideoDao.GetAllVideosData(ctx)
+	if err != nil {
+		return nil, err
+	}
+	resList := []VideoMetadata{}
+	for _, videoData := range videosData {
+		tagNames := tag.Client.GetVideoTags(ctx, videoData.ID)
+		resList = append(resList, VideoMetadata{
+			Name:      videoData.Name,
+			BytesSize: int64(videoData.BytesSize),
+			Tags:      tagNames,
+		})
+	}
 
 	return resList, nil
+}
+
+func New() VideoService {
+	return videoService{}
 }
