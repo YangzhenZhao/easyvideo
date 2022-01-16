@@ -10,6 +10,7 @@ import (
 type IVideoDao interface {
 	InitConf(db *gorm.DB, storageDir string)
 	GetAllVideosData(ctx context.Context) ([]Video, error)
+	GetCoverPicturePathByVideoName(ctx context.Context, videoName string) (string, error)
 }
 
 type videoDaoImpl struct {
@@ -31,4 +32,12 @@ func (dao *videoDaoImpl) GetAllVideosData(ctx context.Context) ([]Video, error) 
 		return nil, result.Error
 	}
 	return videos, nil
+}
+
+func (dao *videoDaoImpl) GetCoverPicturePathByVideoName(ctx context.Context, videoName string) (string, error) {
+	var video Video
+	if result := dao.DB.Where("name = ?", videoName).First(&video); result.Error != nil {
+		return "", result.Error
+	}
+	return video.CoverPictruePath, nil
 }

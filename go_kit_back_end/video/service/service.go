@@ -15,6 +15,7 @@ type VideoMetadata struct {
 
 type VideoService interface {
 	GetAllVideosMetadata(ctx context.Context) ([]VideoMetadata, error)
+	GetCoverPicturePath(ctx context.Context, videoName string) (string, error)
 }
 
 type videoService struct{}
@@ -35,6 +36,10 @@ func (s videoService) GetAllVideosMetadata(ctx context.Context) ([]VideoMetadata
 	}
 
 	return resList, nil
+}
+
+func (s videoService) GetCoverPicturePath(ctx context.Context, videoName string) (string, error) {
+	return rds.VideoDao.GetCoverPicturePathByVideoName(ctx, videoName)
 }
 
 func New() VideoService {
