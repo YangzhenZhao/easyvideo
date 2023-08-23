@@ -38,6 +38,7 @@
             <div class='donwload-play'>
               <el-button icon="el-icon-download" type="primary" @click="downloadVideo(item.name)">下载</el-button>
               <el-button icon="el-icon-video-play" type="primary" @click="playVideo(item.name)">在线播放</el-button>
+              <el-button icon="el-icon-delete" type="primary" @click="deleteVideo(item.name)">删除</el-button>
             </div>
           </div>
         </el-card>
@@ -85,6 +86,9 @@ export default defineComponent({
     const getVideos = async () => {
       const res: videoList = await axios.get(`${nowServerAddress.value}/videos`)
       videoList.value = res.data
+    }
+    const deleteVideo = async (videoName: string) => {
+      await axios.delete(`${nowServerAddress.value}/video/${videoName}`)
     }
     const bytesFormat = (bytesSize: number) => {
       return utils.bytesFormat(bytesSize)
@@ -154,7 +158,8 @@ export default defineComponent({
       handleSelect,
       handleClose,
       nowServerAddress,
-      playVideo
+      playVideo,
+      deleteVideo
     }
   }
 })

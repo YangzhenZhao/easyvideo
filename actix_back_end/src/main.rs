@@ -10,13 +10,13 @@ mod models;
 mod schema;
 mod views;
 
-use crate::views::{cover_picture, download, svae_video, tags, tags_videos, upload, videos};
+use crate::views::{cover_picture, download, svae_video, tags, tags_videos, upload, videos, delete};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init();
     let manager = ConnectionManager::<MysqlConnection>::new(
-        "mysql://root:123456@127.0.0.1:3306/easyvideo?charset=utf8mb4",
+        "mysql://root:woaini123@127.0.0.1:3306/easyvideo?charset=utf8mb4",
     );
     let pool = r2d2::Pool::builder()
         .build(manager)
@@ -43,6 +43,7 @@ async fn main() -> std::io::Result<()> {
             .service(upload)
             .service(svae_video)
             .service(tags_videos)
+            .service(delete)
     })
     .bind(&bind)?
     .run()

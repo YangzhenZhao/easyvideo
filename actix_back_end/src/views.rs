@@ -5,7 +5,7 @@ use crate::schema::video::dsl::*;
 use crate::schema::video_tag::dsl::*;
 use actix_files::NamedFile;
 use actix_multipart::Multipart;
-use actix_web::{get, post, web, Error, HttpResponse, Result};
+use actix_web::{get, post, delete, web, Error, HttpResponse, Result};
 use diesel::insert_into;
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
@@ -13,9 +13,10 @@ use futures::{StreamExt, TryStreamExt};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::io::Write;
+use log::{debug, error, log_enabled, info, Level};
 
 type DbPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
-const STORAGE_DIR: &str = "/mnt/d/video_storage/";
+const STORAGE_DIR: &str = "/Users/nocilantro/Downloads/storage/";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct VideoViewItem {
@@ -123,6 +124,12 @@ pub async fn upload(
             f = web::block(move || f.write_all(&data).map(|_| f)).await?;
         }
     }
+    Ok(HttpResponse::Ok().into())
+}
+
+#[delete("/video/{video_name}")]
+pub async fn delete(pool: web::Data<DbPool>, video_name: web::Path<String>) -> Result<HttpResponse, Error> {
+    info!("test delete");
     Ok(HttpResponse::Ok().into())
 }
 
