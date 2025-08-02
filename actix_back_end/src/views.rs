@@ -129,7 +129,13 @@ pub async fn upload(
 
 #[delete("/video/{video_name}")]
 pub async fn delete(pool: web::Data<DbPool>, video_name: web::Path<String>) -> Result<HttpResponse, Error> {
+    println!("test delete video");
     info!("test delete");
+    let conn = pool.get().expect("couldn't get db connection from pool");
+    let target_video = video
+        .filter(name.eq(format!("{}", video_name)))
+        .first::<models::Video>(&conn)
+        .unwrap();
     Ok(HttpResponse::Ok().into())
 }
 

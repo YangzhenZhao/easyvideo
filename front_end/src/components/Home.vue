@@ -88,7 +88,8 @@ export default defineComponent({
       videoList.value = res.data
     }
     const deleteVideo = async (videoName: string) => {
-      await axios.delete(`${nowServerAddress.value}/video/${videoName}`)
+      const response = await axios.delete(`${nowServerAddress.value}/video/${videoName}`)
+      console.log('---- delete response: ', response)
     }
     const bytesFormat = (bytesSize: number) => {
       return utils.bytesFormat(bytesSize)
